@@ -6,7 +6,7 @@
     <title>Will You Be My Valentine? 💕</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&family=Great+Vibes&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&family=Great+Vibes&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
     <style>
         * {
             margin: 0;
@@ -31,6 +31,22 @@
         @media (max-width: 768px) {
             body {
                 overflow-x: hidden;
+            }
+        }
+
+        /* Reduce motion on mobile and for accessibility */
+        @media (max-width: 768px), (prefers-reduced-motion: reduce) {
+            body {
+                animation: none;
+                background-position: 0% 50%;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
             }
         }
 
@@ -70,6 +86,13 @@
             .bg-image {
                 width: 80px;
                 height: 80px;
+            }
+        }
+
+        /* Simpler/slower background image animation on mobile for performance */
+        @media (max-width: 768px) {
+            .bg-image {
+                animation-duration: 25s !important;
             }
         }
 
@@ -169,7 +192,7 @@
             50% { opacity: 0.9; transform: translateY(-30px) rotate(10deg); }
         }
 
-        /* Shimmer effect overlay */
+        /* Shimmer effect overlay - disabled on mobile for performance */
         body::after {
             content: '';
             position: fixed;
@@ -186,6 +209,12 @@
             animation: shimmer 3s ease-in-out infinite;
             pointer-events: none;
             z-index: 3;
+        }
+
+        @media (max-width: 768px) {
+            body::after {
+                display: none;
+            }
         }
 
         @keyframes shimmer {
@@ -1003,6 +1032,14 @@
             box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
         }
 
+        /* Disable backdrop-filter on mobile (causes lag on many Android browsers) */
+        @media (max-width: 768px) {
+            .sound-toggle {
+                backdrop-filter: none;
+                background: rgba(255, 255, 255, 0.35);
+            }
+        }
+
         .sound-toggle.muted {
             opacity: 0.6;
         }
@@ -1504,7 +1541,7 @@
     <div id="sparkles-container"></div>
 
     <div class="container">
-        <img src="v3.gif" alt="Valentine GIF" class="title-gif">
+        <img src="v3.gif" alt="Valentine GIF" class="title-gif" fetchpriority="high">
         <h1 class="chain-text" id="chainTitle"></h1>
         <p class="question">I have a question for you...</p>
         
@@ -1524,7 +1561,7 @@
         </div>
         <div class="card-grid" id="cardGrid"></div>
         <div class="game-complete" id="gameComplete">
-            <video id="catVideo" class="celebration-video" autoplay muted loop playsinline>
+            <video id="catVideo" class="celebration-video" autoplay muted loop playsinline preload="metadata">
                 <source src="cat.mp4" type="video/mp4">
                 Your browser does not support the video tag.
             </video>
@@ -1536,7 +1573,7 @@
 
     <div class="celebration" id="celebration">
         <div class="celebration-card-view" id="celebrationCardView">
-            <img src="card.gif" alt="Valentine Card" class="celebration-card-gif">
+            <img src="card.gif" alt="Valentine Card" class="celebration-card-gif" loading="lazy">
             <p class="card-view-hint">Click anywhere to read your letter 💕</p>
         </div>
         <div class="celebration-letter-view" id="celebrationLetterView">
@@ -1544,9 +1581,9 @@
                 <div class="letter-slides-wrap">
                     <div class="letter-slide show" data-slide="0">
                         <div class="celebration-gif-row">
-                            <img src="pic2.jpeg" alt="" class="celebration-pic pic-left">
-                            <img src="v2.gif" alt="Celebration GIF" class="celebration-gif">
-                            <img src="pic3.jpeg" alt="" class="celebration-pic pic-right">
+                            <img src="pic2.jpeg" alt="" class="celebration-pic pic-left" loading="lazy">
+                            <img src="v2.gif" alt="Celebration GIF" class="celebration-gif" loading="lazy">
+                            <img src="pic3.jpeg" alt="" class="celebration-pic pic-right" loading="lazy">
                         </div>
                         <p class="letter-greeting">To my love,<br>andrada.</p>
                         <p>Hey hunny, its your love kie, remember when we met the night before the new year? I actually ate 12 grapes under the table as my friend told me and wished that i would find someone special who would love me truly and accept myself for who i am despite my flaws.</p>
@@ -1555,9 +1592,9 @@
                     </div>
                     <div class="letter-slide" data-slide="1">
                         <div class="celebration-gif-row">
-                            <img src="pic1.jpeg" alt="" class="celebration-pic pic-left">
-                            <img src="v2.gif" alt="Celebration GIF" class="celebration-gif">
-                            <img src="pic3.jpeg" alt="" class="celebration-pic pic-right">
+                            <img src="pic1.jpeg" alt="" class="celebration-pic pic-left" loading="lazy">
+                            <img src="v2.gif" alt="Celebration GIF" class="celebration-gif" loading="lazy">
+                            <img src="pic3.jpeg" alt="" class="celebration-pic pic-right" loading="lazy">
                         </div>
                         <p>Andra, i dont want our loves and feelings towards us to be ephemeral or just a "love phase". I want us to be together forever, going through all the obstacles that will come between us. I do not want to lose you, you are the girl that i've been yearning for, the girl that i want to create a sweet future with. I WANT to be with you forever by your side.</p>
                         <p>Even though we live miles away, you are still in my heart, and i wish, I wish one day im able to hold your hands and embrace your hug in my chest. Its crazy, how a few months back you were just a stranger to me, and now you are one of the most important person in my life.</p>
@@ -1688,7 +1725,10 @@
             'Think about it!'
         ];
 
-        // Create sparkles for shining background - varied and more interesting
+        // Detect mobile/touch for lighter animations (reduces lag on Android)
+        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth <= 768 || ('ontouchstart' in window);
+
+        // Create sparkles for shining background - varied and more interesting (fewer on mobile)
         const sparkleTypes = ['sparkle-twinkle', 'sparkle-drift', 'sparkle-float', 'sparkle-pulse'];
         function createSparkle() {
             const container = document.getElementById('sparkles-container');
@@ -1713,9 +1753,12 @@
             setTimeout(() => sparkle.remove(), 5000);
         }
 
-        setInterval(createSparkle, 180);
-        for (let i = 0; i < 40; i++) {
-            setTimeout(() => createSparkle(), i * 80);
+        var sparkleInterval = isMobile ? 450 : 180;
+        var sparkleInitialCount = isMobile ? 12 : 40;
+        var sparkleInitialDelay = isMobile ? 150 : 80;
+        setInterval(createSparkle, sparkleInterval);
+        for (let i = 0; i < sparkleInitialCount; i++) {
+            setTimeout(() => createSparkle(), i * sparkleInitialDelay);
         }
 
         // Chain text animation for title
@@ -1735,11 +1778,11 @@
         // Initialize chain text on page load
         createChainText();
 
-        // Create multiple moving background images
+        // Create multiple moving background images (fewer on mobile to reduce lag)
         function createBackgroundImages() {
             const container = document.getElementById('bg-images-container');
             const images = ['8.png', '9.png'];
-            const numImages = 20; // Number of images to create
+            const numImages = isMobile ? 5 : 20; // Fewer on mobile for performance
             
             for (let i = 0; i < numImages; i++) {
                 const img = document.createElement('div');
@@ -2059,10 +2102,10 @@
             }, 500);
         });
 
-        // Create sparkles for celebration
+        // Create sparkles for celebration (fewer on mobile to reduce lag)
         function createSparkles() {
-            // Create initial burst of sparkles
-            for (let i = 0; i < 100; i++) {
+            var burstCount = isMobile ? 25 : 100;
+            for (let i = 0; i < burstCount; i++) {
                 const sparkle = document.createElement('div');
                 sparkle.className = 'sparkle';
                 sparkle.style.left = Math.random() * 100 + '%';
@@ -2076,11 +2119,12 @@
                 }, 3000);
             }
             
-            // Create continuous celebration sparkles
-            createCelebrationSparkles();
+            if (!isMobile) {
+                createCelebrationSparkles();
+            }
         }
 
-        // Create continuous sparkles around celebration content
+        // Create continuous sparkles around celebration content (desktop only on mobile we skip this)
         function createCelebrationSparkles() {
             const interval = setInterval(() => {
                 if (!celebration.classList.contains('show')) {
@@ -2088,7 +2132,8 @@
                     return;
                 }
                 
-                for (let i = 0; i < 5; i++) {
+                var perTick = isMobile ? 2 : 5;
+                for (let i = 0; i < perTick; i++) {
                     const sparkle = document.createElement('div');
                     sparkle.className = 'celebration-sparkle';
                     
@@ -2114,7 +2159,7 @@
                         sparkle.remove();
                     }, 3000);
                 }
-            }, 300);
+            }, isMobile ? 800 : 300);
         }
     </script>
 </body>
