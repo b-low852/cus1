@@ -522,6 +522,14 @@
             }
         }
 
+        /* Love letter: disable heavy animations on mobile (Android) to fix lag */
+        @media (max-width: 768px) {
+            .celebration::before {
+                animation: none;
+                background-position: 50% 50%;
+            }
+        }
+
         .celebration.show {
             display: flex !important;
         }
@@ -659,6 +667,7 @@
             .celebration-gif {
                 max-width: 150px;
                 margin: 15px;
+                animation: fadeIn 1s ease-in;
             }
         }
 
@@ -695,6 +704,10 @@
                 font-size: 3em;
                 margin-bottom: 20px;
                 letter-spacing: 1px;
+                animation: none;
+            }
+            .celebration-content h2::before {
+                display: none;
             }
         }
 
@@ -767,6 +780,7 @@
                 margin-top: 20px;
                 margin-bottom: 12px;
                 line-height: 1.5;
+                animation: fadeInUp 0.8s ease forwards;
             }
         }
 
@@ -885,6 +899,14 @@
             transform: rotate(8deg);
             animation-delay: 1.2s;
             animation-name: celebrationPicFloatRight;
+        }
+
+        @media (max-width: 768px) {
+            .celebration-pic,
+            .celebration-pic.pic-left,
+            .celebration-pic.pic-right {
+                animation: none;
+            }
         }
 
         @keyframes celebrationPicFloatLeft {
@@ -1369,7 +1391,7 @@
             }
         }
 
-        /* Rotating sparkles around GIF */
+        /* Rotating sparkles around GIF - hidden on mobile to reduce lag */
         .celebration-gif::before,
         .celebration-gif::after {
             content: '✨';
@@ -1391,6 +1413,14 @@
             transform-origin: 0 -80px;
             animation-duration: 4s;
             animation-direction: reverse;
+        }
+
+        @media (max-width: 768px) {
+            .celebration-gif::before,
+            .celebration-gif::after {
+                content: none;
+                display: none;
+            }
         }
 
         @keyframes rotateAround {
